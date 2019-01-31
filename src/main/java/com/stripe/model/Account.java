@@ -7,6 +7,7 @@ import com.stripe.net.RequestOptions;
 import java.util.List;
 import java.util.Map;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,38 +18,88 @@ import lombok.Setter;
 public class Account extends ApiResource implements HasId, MetadataStore<Account> {
   @Getter(onMethod = @__({@Override})) String id;
   String object;
-  String businessLogo;
-  String businessName;
-  String businessPrimaryColor;
-  String businessUrl;
+  AccountBusinessProfile businessProfile;
+  String businessType;
+  AccountCapabilities capabilities;
   Boolean chargesEnabled;
+  AccountCompany company;
   String country;
   Long created;
-  Boolean debitNegativeBalances;
-  DeclineChargeOn declineChargeOn;
   String defaultCurrency;
   Boolean deleted;
   Boolean detailsSubmitted;
   String displayName;
   String email;
   ExternalAccountCollection externalAccounts;
-  Keys keys;
-  LegalEntity legalEntity;
-  LoginLinkCollection loginLinks;
-  @Getter(onMethod = @__({@Override})) Map<String, String> metadata;
-  PayoutSchedule payoutSchedule;
-  String payoutStatementDescriptor;
+  Person individual;
+  Map<String, String> metadata;
   Boolean payoutsEnabled;
-  String productDescription;
-  String statementDescriptor;
-  Address supportAddress;
-  String supportEmail;
-  String supportPhone;
-  String supportUrl;
+  Requirements requirements;
+  AccountSettings settings;
   String timezone;
   TosAcceptance tosAcceptance;
-  Boolean transfersEnabled;
   String type;
+
+  /**
+   * The {@code business_logo} attribute.
+   *
+   * @see <a href="https://stripe.com/docs/upgrades#2019-02-19">API version 2019-02-19</a>
+   */
+  @Deprecated
+  String businessLogo;
+
+  @Deprecated
+  String businessName;
+
+  @Deprecated
+  String businessPrimaryColor;
+
+  @Deprecated
+  String businessUrl;
+
+  @Deprecated
+  Boolean debitNegativeBalances;
+
+  @Deprecated
+  DeclineChargeOn declineChargeOn;
+
+  @Deprecated
+  Keys keys;
+
+  @Deprecated
+  LegalEntity legalEntity;
+
+  @Deprecated
+  LoginLinkCollection loginLinks;
+
+  @Deprecated
+  PayoutSchedule payoutSchedule;
+
+  @Deprecated
+  String payoutStatementDescriptor;
+
+  @Deprecated
+  String productDescription;
+
+  @Deprecated
+  String statementDescriptor;
+
+  @Deprecated
+  Address supportAddress;
+
+  @Deprecated
+  String supportEmail;
+
+  @Deprecated
+  String supportPhone;
+
+  @Deprecated
+  String supportUrl;
+
+  @Deprecated
+  Boolean transfersEnabled;
+
+  @Deprecated
   Verification verification;
 
   /**
@@ -261,6 +312,99 @@ public class Account extends ApiResource implements HasId, MetadataStore<Account
   @Getter
   @Setter
   @EqualsAndHashCode(callSuper = false)
+  public static class AccountBusinessProfile extends StripeObject {
+    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) ExpandableField<File> logo;
+    String mcc;
+    String name;
+    String productDescription;
+    Address supportAddress;
+    String supportEmail;
+    String supportPhone;
+    String supportUrl;
+    String url;
+
+    // <editor-fold desc="logo">
+    public String getLogo() {
+      return (this.logo != null) ? this.logo.getId() : null;
+    }
+
+    public void setLogo(String logoId) {
+      this.logo = setExpandableFieldId(logoId, this.logo);
+    }
+
+    public File getLogoObject() {
+      return (this.logo != null) ? this.logo.getExpanded() : null;
+    }
+
+    public void setLogoObject(File c) {
+      this.logo = new ExpandableField<>(c.getId(), c);
+    }
+    // </editor-fold>
+  }
+
+  @Getter
+  @Setter
+  @EqualsAndHashCode(callSuper = false)
+  public static class AccountCapabilities extends StripeObject {
+    String cardPayments;
+    String legacyPayments;
+    String platformPayments;
+  }
+
+  @Getter
+  @Setter
+  @EqualsAndHashCode(callSuper = false)
+  public static class AccountCardPaymentsSettings extends StripeObject {
+    DeclineChargeOn declineOn;
+    String statementDescriptorPrefix;
+  }
+
+  @Getter
+  @Setter
+  @EqualsAndHashCode(callSuper = false)
+  public static class AccountCompany extends StripeObject {
+    Address address;
+    Person.JapanAddress addressKana;
+    Person.JapanAddress addressKanji;
+    Boolean directorsProvided;
+    String name;
+    String nameKana;
+    String nameKanji;
+    Boolean ownersProvided;
+    String phone;
+    Boolean taxIdProvided;
+    String taxIdRegistrar;
+    Boolean vatIdProvided;
+  }
+
+  @Getter
+  @Setter
+  @EqualsAndHashCode(callSuper = false)
+  public static class AccountPaymentsSettings extends StripeObject {
+    String statementDescriptor;
+  }
+
+  @Getter
+  @Setter
+  @EqualsAndHashCode(callSuper = false)
+  public static class AccountPayoutsSettings extends StripeObject {
+    Boolean debitNegativeBalances;
+    PayoutSchedule schedule;
+    String statementDescriptor;
+  }
+
+  @Getter
+  @Setter
+  @EqualsAndHashCode(callSuper = false)
+  public static class AccountSettings extends StripeObject {
+    AccountCardPaymentsSettings cardPayments;
+    AccountPaymentsSettings payments;
+    AccountPayoutsSettings payouts;
+  }
+
+  @Getter
+  @Setter
+  @EqualsAndHashCode(callSuper = false)
   public static class DeclineChargeOn extends StripeObject {
     Boolean avsFailure;
     Boolean cvcFailure;
@@ -269,9 +413,21 @@ public class Account extends ApiResource implements HasId, MetadataStore<Account
   @Getter
   @Setter
   @EqualsAndHashCode(callSuper = false)
-  public static class Keys extends StripeObject {
-    String publishable;
-    String secret;
+  public static class Requirements extends StripeObject {
+    Long currentDeadline;
+    List<String> currentlyDue;
+    String disabledReason;
+    List<String> eventuallyDue;
+    List<String> pastDue;
+  }
+
+  @Getter
+  @Setter
+  @EqualsAndHashCode(callSuper = false)
+  public static class TosAcceptance extends StripeObject {
+    Long date;
+    String ip;
+    String userAgent;
   }
 
   @Getter
@@ -287,15 +443,16 @@ public class Account extends ApiResource implements HasId, MetadataStore<Account
   @Getter
   @Setter
   @EqualsAndHashCode(callSuper = false)
-  public static class TosAcceptance extends StripeObject {
-    Long date;
-    String ip;
-    String userAgent;
+  @Deprecated
+  public static class Keys extends StripeObject {
+    String publishable;
+    String secret;
   }
 
   @Getter
   @Setter
   @EqualsAndHashCode(callSuper = false)
+  @Deprecated
   public static class TransferSchedule extends StripeObject {
     Long delayDays;
     String interval;
@@ -306,6 +463,7 @@ public class Account extends ApiResource implements HasId, MetadataStore<Account
   @Getter
   @Setter
   @EqualsAndHashCode(callSuper = false)
+  @Deprecated
   public static class Verification extends StripeObject {
     Boolean contacted;
     String disabledReason;
