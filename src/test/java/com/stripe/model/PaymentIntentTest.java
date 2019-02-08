@@ -17,11 +17,12 @@ public class PaymentIntentTest extends BaseStripeTest {
     assertNotNull(resource);
     assertNotNull(resource.getId());
 
-    PaymentIntentSourceAction action =  resource.getNextSourceAction();
+    PaymentIntentNextSourceAction action =  resource.getNextSourceAction();
     assertNotNull(action);
 
     assertEquals("authorize_with_url", action.getType());
-    PaymentIntentSourceActionValueAuthorizeWithUrl actionAuthorize = action.getAuthorizeWithUrl();
+    PaymentIntentNextSourceActionValueAuthorizeWithUrl actionAuthorize = action
+        .getAuthorizeWithUrl();
     assertNotNull(actionAuthorize);
     assertEquals("https://stripe.com", actionAuthorize.getUrl());
     assertEquals("https://stripe.com/return", actionAuthorize.getReturnUrl());
