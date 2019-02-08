@@ -54,8 +54,8 @@ public class PaymentIntent extends ApiResource implements HasId, MetadataStore<P
   Long canceledAt;
 
   /**
-   * User-given reason for cancellation of this PaymentIntent, one of `duplicate`, `fraudulent`, or
-   * `requested_by_customer`.
+   * User-given reason for cancellation of this PaymentIntent, one of `duplicate`, `fraudulent`,
+   * `requested_by_customer`, or `failed_invoice`.
    */
   @SerializedName("cancellation_reason")
   String cancellationReason;
@@ -134,7 +134,7 @@ public class PaymentIntent extends ApiResource implements HasId, MetadataStore<P
    * fulfill a payment using the provided source.
    */
   @SerializedName("next_source_action")
-  PaymentIntentSourceAction nextSourceAction;
+  PaymentIntentNextSourceAction nextSourceAction;
 
   /** String representing the object's type. Objects of the same type share the same value. */
   @SerializedName("object")
